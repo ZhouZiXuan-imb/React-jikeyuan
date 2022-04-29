@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Login.css"
+import "./login.css"
 // antd组件
 import { message, Button, Card, Checkbox, Form, Input} from "antd";
 // import {useDispatch} from "react-redux";

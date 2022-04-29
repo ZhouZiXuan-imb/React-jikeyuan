@@ -30,8 +30,10 @@ instanceWidthToken.interceptors.request.use((config) => {
 });
 // 带token的响应拦截器
 instanceWidthToken.interceptors.response.use(onResponseFulfilled, async (error) => {
-    if(error.response) {
+    if(error.response.status === 401) {
         message.error("用户过期，请重新登录")
+
+        window.location.href = 'http://localhost:3000/login'
 
         return error.response
     }

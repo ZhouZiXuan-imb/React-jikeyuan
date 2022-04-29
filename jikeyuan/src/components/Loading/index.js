@@ -1,8 +1,12 @@
 import React from 'react';
+import {Spin} from "antd";
+import "./index.css"
 
 function Loading(props) {
     return (
-        <div>加载中...</div>
+        <div className="example">
+            <Spin tip={"Loading"} />
+        </div>
     );
 }
 

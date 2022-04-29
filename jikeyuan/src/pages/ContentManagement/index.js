@@ -8,6 +8,7 @@ import moment from 'moment';
 import {imgSrc} from "@/assets/images/defaultCover";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 import {delArticle} from "@/api/contentApi";
+import {useNavigate} from "react-router";
 
 // 日期选择器
 const {RangePicker} = DatePicker;
@@ -61,7 +62,8 @@ function ContentManagement() {
 
     useEffect(() => {
         dispatch(getArticleList(reqParams))
-    },[])
+        // eslint-disable-next-line
+    },[dispatch])
 
     // Table组件
     // 表格状态数据
@@ -71,6 +73,8 @@ function ContentManagement() {
         {text: "审核通过", color: "green"},
         {text: "审核拒绝", color: "red"},
     ];
+
+    const navigate = useNavigate();
     // 表头数据
     const columns = [
         {
@@ -78,6 +82,7 @@ function ContentManagement() {
             dataIndex: "cover",
             key: "cover",
             render(cover) {
+                console.log(cover)
                 return <Image preview={false} src={cover.images[0] ? cover.images[0] : imgSrc} width={200}
                               height={150}/>
             }
@@ -147,8 +152,14 @@ function ContentManagement() {
                     }
                 }
 
+                function handleEditArticle() {
+                    navigate(`/home/article`, {
+                        state: {id: article.id}
+                    })
+                }
+
                 return <Space>
-                    <Button type="primary" shape="circle">
+                    <Button type="primary" shape="circle" onClick={() => handleEditArticle()}>
                         <EditOutlined/>
                     </Button>
                     <Button type="primary" shape="circle" danger onClick={confirm}>
@@ -216,7 +227,6 @@ function ContentManagement() {
                 <Table columns={columns} dataSource={articleList} position={["bottomCenter"]}
                        pagination={{
                            position: ["bottomCenter"],
-                           // hideOnSinglePage: true,
                            pageSizeOptions: [5, 10, 15, 20, 25, 30],
                            pageSize: per_page,
                            total: total_count,

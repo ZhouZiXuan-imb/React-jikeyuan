@@ -35,7 +35,7 @@ const {reducer: articleReducer} = createSlice({
             state.channels = action.payload?.data.channels;
         },
         [getArticleList.fulfilled](state, {payload: {data}}) {
-            state.articles = data.results.filter(item => {
+            state.articles = data.results?.filter(item => {
                 item.key = item.id
                 return true;
             });
