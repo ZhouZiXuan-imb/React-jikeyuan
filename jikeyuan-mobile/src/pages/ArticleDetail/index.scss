@@ -1,0 +1,224 @@
+.article-detail {
+  height: 100%;
+  background-color: #f7f8fa;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .article-top {
+    border-bottom: 1px solid #f9f9f9;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .article-title-and-content {
+    background-color: #fff;
+    overflow-y: auto;
+    flex: 1;
+
+    h3, p {
+      margin: 0;
+    }
+
+    .article-title {
+      padding: 20px 17px 0;
+
+      .title {
+        font-size: 24px;
+        font-weight: normal;
+      }
+
+      .article-num {
+        margin-top: 8px;
+        color: #a5a6ab;
+        font-size: 12px;
+
+        span:nth-child(2), span:nth-child(3) {
+          margin-left: 5px;
+          padding-left: 5px;
+          border-left: 1px solid #a5a6ab;
+        }
+      }
+
+      .article-author {
+        display: flex;
+        padding-top: 20px;
+        align-items: center;
+
+        img {
+          width: 33.75px;
+          height: 33.75px;
+          border-radius: 50%;
+        }
+
+        .adm-button {
+          width: 64px;
+          height: 30px;
+          font-size: 12px;
+        }
+
+        .article-author-name {
+          flex: 1;
+          font-size: 16px;
+          padding: 0 8px;
+        }
+      }
+    }
+
+    .article-content {
+      width: 100%;
+      padding: 25px 16px;
+      overflow: hidden;
+      box-sizing: border-box;
+
+      .hljs {
+        display: block;
+        overflow-x: auto;
+        padding: 0.5em;
+        background: #1e1e1e;
+        color: #dcdcdc;
+      }
+
+
+      .article-top-line {
+        padding-top: 20px;
+        border-top: 1px solid #ebedf0;
+      }
+
+      .timer {
+        text-align: right;
+        font-size: .32rem;
+        color: #a5a6ab;
+        padding-top: 25px;
+      }
+    }
+  }
+
+  .article-comments {
+    background-color: #fff;
+    margin-top: 12px;
+
+    .box {
+      background: #eee;
+      width: 40px;
+      height: 40px;
+      display: block;
+      border-radius: 8px;
+      &.dark {
+        background: #666666;
+      }
+    }
+
+    .comment-title {
+      background: #fff;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #000;
+      border-bottom: 1px solid #ebedf0;
+
+      p {
+        margin: 0;
+      }
+
+      p:first-child {
+        font-size: 16px;
+      }
+
+      p:last-child {
+        font-size: 14px;
+        color: #a5a6ab;
+      }
+    }
+
+    .none {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0;
+
+      span {
+        padding-top: 5px;
+        color: #969799;
+      }
+    }
+  }
+
+  .article-bottom {
+    display: flex;
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    align-items: center;
+    padding: 5px 0;
+    border: 1px solid #eee;
+
+    .input-comment {
+      flex: 1;
+      background: #f7f8fa;
+      height: 32px;
+      border-radius: 15px;
+      padding: 0 10px;
+      line-height: 32px;
+      color: #ccc;
+
+      .icon {
+        margin-right: 10px;
+      }
+
+      .value {
+       display: inline-block;
+      }
+    }
+
+    .comments, .like, .collect, .share {
+      font-size: 12px;
+      text-align: center;
+      margin: 0 12px;
+    }
+
+    .comments .icon, .like .icon, .collect .icon, .share .icon {
+        font-size: 20px;
+    }
+  }
+}
+
+.adm-popup {
+  .adm-nav-bar-right {
+    //height: 45px;
+    height: 100%;
+  }
+
+  .adm-nav-bar-title {
+    font-size: 16px;
+  }
+
+  .adm-nav-bar-left {
+    font-size: 14px;
+  }
+
+  .comment-value {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 16px;
+    overflow: hidden;
+    color: #323233;
+    font-size: .37333rem;
+    line-height: .64rem;
+    background-color: #fff;
+
+    .adm-text-area {
+      background: #f7f8fa;
+      border-radius: 0.21333rem;
+      padding: 5px 10px;
+
+      .adm-text-area-element {
+        font-size: 14px;
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+.adm-list {
+  .scroll-wrapper {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .adm-list-item {
+    box-sizing: border-box;
+  }
+
+  .adm-list-item-content-main {
+    box-sizing: border-box;
+    .title {
+      font-weight: 400;
+      line-height: 1;
+      font-size: 17px;
+      margin-bottom: 11px;
+      margin-top: 0;
+    }
+
+    .title.w66 {
+      width: 66%;
+      float: left;
+      padding-right: 11px;
+    }
+
+    .info_box {
+      color: #999;
+      line-height: 1.5;
+      position: relative;
+      //font-size: 14rem;
+
+      span {
+        font-size: 13px;
+        padding-right: 10px;
+      }
+    }
+
+    .article-images {
+      display: flex;
+      justify-content: space-between;
+
+      .adm-image {
+        margin-right: 8px;
+      }
+
+      .adm-image:last-child{
+        margin-right: 0;
+      }
+    }
+  }
+
+  .adm-list-body {
+    border-top: none;
+    border-bottom: none;
+    overflow-y: auto;
+  }
+
+
+}

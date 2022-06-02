@@ -1,0 +1,10 @@
+.adm-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .adm-tabs-content {
+    padding: 0 0 51px;
+    overflow: hidden;
+    height: 100%;
+  }
+}

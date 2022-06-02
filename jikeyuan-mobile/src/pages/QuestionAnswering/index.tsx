@@ -1,6 +1,6 @@
 import React from 'react';
 
-function QuestionAnswering(props) {
+function QuestionAnswering() {
     return (
         <div>问答</div>
     );

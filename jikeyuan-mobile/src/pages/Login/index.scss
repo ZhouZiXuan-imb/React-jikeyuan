@@ -1,0 +1,20 @@
+.wrapper {
+  padding: 0 32px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 400;
+    padding: 30px 0;
+  }
+
+  .form {
+    .login-button {
+      height: 50px;
+      margin-top: 30px;
+      border: none;
+      background: linear-gradient(90deg,#fe4f4f,#fc6627);
+      font-size: 16px;
+    }
+  }
+
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Video(props) {
+function Video() {
     return (
         <div>视频</div>
     );
