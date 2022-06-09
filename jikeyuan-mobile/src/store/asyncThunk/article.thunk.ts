@@ -1,7 +1,6 @@
 // 获取文章详情数据
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  ArticleComments,
   ArticleCommentsRequestParams,
   ArticleCommentsResponse,
   ArticleDetailRequestParams,
@@ -18,7 +17,6 @@ import {
   FollowingsAuthRequestParams,
   LikeArticleRequestParams,
   LikeArticleResponse,
-  LikeCommentAxiosResponse,
   LikeCommentRequestParams,
   PublishCommentToArticleRequestParams,
   PublishCommentToArticleResponse,
@@ -36,7 +34,6 @@ import {
   postLikeArticle,
   publishCommentToArticle,
 } from "@/api/articleDetailApi";
-import { updateCommentIsLikingAndLikeCount } from "@/store/article.slice";
 
 export const fetchArticleDetail = createAsyncThunk<
   ArticleDetailResponse,
@@ -54,10 +51,10 @@ export const fetchArticleDetail = createAsyncThunk<
 export const fetchArticleDetailComments = createAsyncThunk<
   ArticleCommentsResponse,
   ArticleCommentsRequestParams
->("article/articleDetailComment", async (payload) => {
+>("article/articleDetailComment", (payload) => {
   let { type, limit, offset, source } = payload;
   try {
-    return await getArticleCommentsList<ArticleComments>({
+    return getArticleCommentsList({
       type,
       limit,
       offset,
@@ -97,7 +94,7 @@ export const fetchCancelLikeArticle = createAsyncThunk<
 export const fetchCollectArticle = createAsyncThunk<
   CollectArticleResponse,
   CollectArticleRequestParams
->("article/collectArticle", (payload: LikeArticleRequestParams) => {
+>("article/collectArticle", (payload) => {
   let { art_id } = payload;
   try {
     return postCollectArticle(art_id);
@@ -164,7 +161,7 @@ export const fetchCancelFollowingsAuth = createAsyncThunk<
 
 // 对评论进行点赞或取消点赞
 export const fetchIsLikeComment = createAsyncThunk<
-  LikeCommentAxiosResponse,
+  LikeCommentRequestParams,
   LikeCommentRequestParams
 >("article/likeComment", (payload) => {
   const { target, is_liking } = payload;
@@ -172,28 +169,17 @@ export const fetchIsLikeComment = createAsyncThunk<
   // 判断用户是要取消点赞还是点赞，如果是false就是要点赞，否则就是取消点赞，false是当前没有点赞的状态，true是点赞了的状态
   if (!is_liking) {
     try {
-      return likeComment({ target });
+      likeComment({ target });
+      return { target, is_liking };
     } catch (error) {
       throw new Error("点赞失败");
     }
   } else {
     try {
-      return cancelLikeComment({ target });
+      cancelLikeComment({ target });
+      return { target, is_liking };
     } catch (error) {
       throw new Error("取消点赞失败");
     }
   }
 });
-
-// export const fetchCancelLikeComment = createAsyncThunk<
-//   CancelLikeCommentAxiosResponse,
-//   CancelLikeCommentRequestParams
-// >("article/cancelLikeComment", (payload, ThunkApi) => {
-//   const { target } = payload;
-//   try {
-//     // ThunkApi.dispatch(updateCommentIsLikingAndLikeCount({ count: -1 }));
-//     return cancelLikeComment({ target });
-//   } catch (error) {
-//     throw new Error("取消点赞失败");
-//   }
-// });

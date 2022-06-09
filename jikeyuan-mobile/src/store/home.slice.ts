@@ -1,21 +1,16 @@
 // 创建切片并导出
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  AllArticleAxiosResponse,
-  AllArticlesRequestParams,
-} from "../types/home";
-import {
-  getAllChannelsList,
-  getArticlesList,
-  getChannelsList,
-  postRemoveChannel,
-} from "../api/homeApi";
-import { UserArticleResponse } from "@/types/home";
-import { Article, Channel, UserChannel } from "@/types/data";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { postRemoveChannel } from "@/api/homeApi";
+import { Article, Channel } from "@/types/data";
 import differenceBy from "lodash/differenceBy";
 import { getToken } from "@/utils/token";
 import { getLocalChannels, setLocalChannels } from "@/utils/channel";
 import sortBy from "lodash/sortBy";
+import {
+  fetchAllChannels,
+  fetchArticles,
+  fetchChannels,
+} from "@/store/asyncThunk/home.thunk";
 
 export const HOME_SLICE_NAME = "home";
 
@@ -39,68 +34,6 @@ const initialState: HomeReducerState = {
   optionalChannels: [],
 };
 
-// 获取频道列表数据
-export const fetchChannels = createAsyncThunk<Channel[]>(
-  "home/fetchChannelsStatus",
-  async () => {
-    // 调用api接口获取数据
-    try {
-      let token = getToken();
-      if (token) {
-        let {
-          data: { channels },
-        } = await getChannelsList();
-        return channels;
-      } else {
-        const localChannels = JSON.parse(
-          localStorage.getItem("jky-m-channels") ?? "[]"
-        ) as Channel[];
-        // console.log(localChannels);
-        if (localChannels.length === 0) {
-          console.log(111);
-          // 如果  length===0  就代表本地没有数据，调用接口获取数据
-          let {
-            data: { channels },
-          } = await getChannelsList();
-          // 把获取到的channels保存到本地
-          setLocalChannels(channels);
-          // 返回给reducer
-          return channels;
-        }
-        console.log(222);
-        // 如果本地有数据，直接把数据返回给reducer
-        return localChannels;
-      }
-    } catch (error) {
-      throw new Error("频道列表数据获取失败");
-    }
-  }
-);
-// 获取当前频道对应的新闻推荐列表
-export const fetchArticles = createAsyncThunk<
-  UserArticleResponse,
-  AllArticlesRequestParams
->("home/fetchArticlesStatus", (payload) => {
-  let { channelId, timestamp } = payload;
-  try {
-    return getArticlesList(channelId, timestamp);
-  } catch (error) {
-    throw new Error("新闻推荐列表获取失败");
-  }
-});
-
-// 获取所有频道列表
-export const fetchAllChannels = createAsyncThunk<AllArticleAxiosResponse>(
-  "home/fetchAllChannelsStatus",
-  () => {
-    try {
-      return getAllChannelsList();
-    } catch (error) {
-      throw new Error("所有频道列表获取失败");
-    }
-  }
-);
-
 // 创建切片
 const { actions, reducer: homeReducer } = createSlice({
   name: HOME_SLICE_NAME,
@@ -112,9 +45,7 @@ const { actions, reducer: homeReducer } = createSlice({
     },
     // 删除频道
     removeChannel(state, { payload }: PayloadAction<Channel>) {
-      let { id, name } = payload;
-      let channels = state.channels;
-      // console.log(payload);
+      let { id } = payload;
       let token = getToken();
       if (token) {
         // 登陆了就直接发起请求删除频道数据
@@ -132,7 +63,6 @@ const { actions, reducer: homeReducer } = createSlice({
         );
         state.channelActiveKey = `${newChannels[0].id}`;
       }
-      // console.log(channel_id);
     },
     // 添加频道
     addChannel(state, { payload }: PayloadAction<Channel>) {
@@ -153,7 +83,6 @@ const { actions, reducer: homeReducer } = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchChannels.fulfilled, (state, action) => {
       let { payload } = action;
-      console.log(payload);
       state.channels = payload;
       setLocalChannels(payload);
     });

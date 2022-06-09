@@ -1,0 +1,39 @@
+.profile-info {
+  height: 100%;
+
+  .container{
+    background-color: #f8f8f8;
+    .adm-nav-bar {
+      background-color: #ffffff;
+      .adm-nav-bar-title {
+        font-size: 16px;
+      }
+    }
+
+    .adm-list {
+      .adm-list-item {
+        font-size: 14px;
+
+        .avatar-wrapper {
+          display: inline-block;
+          border-radius: 50%;
+          overflow: hidden;
+          vertical-align: middle;
+
+          img {
+            display: block;
+            object-fit: cover;
+          }
+        }
+
+      }
+    }
+  }
+
+
+}
+
+.adm-action-sheet-button-item-name {
+  font-size: 16px;
+  padding: 10px 0;
+}

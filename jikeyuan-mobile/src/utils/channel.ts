@@ -1,12 +1,9 @@
-import { Channel, UserChannel, UserChannelResponse } from "@/types/data";
-import { getChannelsList } from "@/api/homeApi";
+import { Channel } from "@/types/data";
 
 export function getLocalChannels() {
-  let channels = JSON.parse(
+  return JSON.parse(
     localStorage.getItem("jky-m-channels") ?? "[]"
   ) as Channel[];
-  console.log(channels);
-  return channels;
 }
 
 export function setLocalChannels(channels: Channel[]) {

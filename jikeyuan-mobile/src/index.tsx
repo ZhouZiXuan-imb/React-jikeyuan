@@ -10,11 +10,11 @@ import { store } from "./store";
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+  // </React.StrictMode>
 );

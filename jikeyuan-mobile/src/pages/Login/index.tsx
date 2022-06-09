@@ -9,24 +9,23 @@ import {
   LoginResponse,
 } from "@/types/login";
 import { setToken } from "@/utils/token";
-import { getHistory } from "@/utils/history";
 
 function Login() {
   const navigate = useNavigate();
   function back() {
-    navigate(-1);
+    navigate("/home");
   }
 
   let [form] = Form.useForm();
 
   async function onFinish({ mobile, code }: LoginRequestParams) {
     let {
-      data: { token },
+      data: { token, refresh_token },
     } = await login<LoginResponse>({ mobile, code });
 
     if (token) {
       // 获取到token直接存到本地
-      setToken(token);
+      setToken({ token, refresh_token });
 
       // 跳转路由到
       navigate(-1);

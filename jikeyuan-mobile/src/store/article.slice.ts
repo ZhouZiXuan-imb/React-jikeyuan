@@ -1,9 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  ArticleComments,
-  ArticleDetail,
-  ArticleDetailResponse,
-} from "@/types/article";
+import { ArticleComments, ArticleDetail } from "@/types/article";
 import {
   fetchArticleDetail,
   fetchArticleDetailComments,
@@ -17,7 +13,7 @@ import {
   fetchPublishCommentToArticle,
 } from "@/store/asyncThunk/article.thunk";
 
-export const ARTICLE_DETAIL_SLICE = "article";
+export const ARTICLE_DETAIL_SLICE_NAME = "article";
 
 type initialStateType = {
   comment: ArticleComments;
@@ -47,7 +43,7 @@ const initialState: initialStateType = {
 };
 
 const { actions, reducer: articleDetailReducer } = createSlice({
-  name: ARTICLE_DETAIL_SLICE,
+  name: ARTICLE_DETAIL_SLICE_NAME,
   initialState: initialState,
   reducers: {
     updateCommentIsLikingAndLikeCount(
@@ -161,7 +157,27 @@ const { actions, reducer: articleDetailReducer } = createSlice({
     builder.addCase(fetchCancelFollowingsAuth.fulfilled, (state) => {
       state.article.is_followed = false;
     });
-    builder.addCase(fetchIsLikeComment.fulfilled, () => {});
+    builder.addCase(fetchIsLikeComment.fulfilled, (state, action) => {
+      let {
+        payload: { target, is_liking },
+      } = action;
+
+      state.comment.results = state.comment.results.map((item) => {
+        if (item.com_id === target) {
+          item.is_liking = !is_liking;
+
+          if (is_liking) {
+            item.like_count -= 1;
+            state.comment.like_count -= 1;
+          } else {
+            item.like_count += 1;
+            state.comment.like_count += 1;
+          }
+        }
+
+        return item;
+      });
+    });
   },
 });
 

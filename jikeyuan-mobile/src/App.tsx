@@ -4,6 +4,9 @@ import Layout from "./pages/Layout/Layout";
 import { Navigate, Route, Routes } from "react-router";
 import ArticleDetail from "./pages/ArticleDetail";
 import Login from "@/pages/Login";
+import ProfileInfo from "@/pages/ProfileInfo";
+import Search from "@/pages/Search";
+import SearchResult from "@/pages/Search/components/SearchResult";
 
 function App() {
   return (
@@ -14,6 +17,9 @@ function App() {
         <Route path={"/home/*"} element={<Layout />}></Route>
         <Route path={"/article/:id"} element={<ArticleDetail />} />
         <Route path={"/login"} element={<Login />} />
+        <Route path={"/profile-info"} element={<ProfileInfo />} />
+        <Route path={"/search"} element={<Search />} />
+        <Route path={"/search/result"} element={<SearchResult />} />
       </Routes>
     </div>
   );

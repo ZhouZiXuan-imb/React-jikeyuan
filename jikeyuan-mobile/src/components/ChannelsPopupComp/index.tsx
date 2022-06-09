@@ -6,10 +6,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks/store";
 import {
   addChannel,
   changeActiveKey,
-  fetchAllChannels,
   removeChannel,
 } from "@/store/home.slice";
 import { Channel } from "@/types/data";
+import {fetchAllChannels} from "@/store/asyncThunk/home.thunk";
 
 type ChannelsPopupCompPropsType = {
   isShowUpdateChannels: boolean;
@@ -20,10 +20,17 @@ function ChannelsPopupComp(props: ChannelsPopupCompPropsType) {
   const { isShowUpdateChannels, setIsShowUpdateChannels } = props;
   const dispatch = useAppDispatch();
 
+  const [toggleEditAndDone, setToggleEditAndDone] = useState(true);
+
+  function handleClosePopup () {
+    setIsShowUpdateChannels(false)
+    setToggleEditAndDone(true);
+  }
+
   // NavBar右边的内容
   const closeUpdateChannels = (
     <div className={"close"}>
-      <span onClick={() => setIsShowUpdateChannels(false)}>
+      <span onClick={() => handleClosePopup()}>
         <i>
           <CloseOutline />
         </i>
@@ -31,7 +38,6 @@ function ChannelsPopupComp(props: ChannelsPopupCompPropsType) {
     </div>
   );
 
-  const [toggleEditAndDone, setToggleEditAndDone] = useState(true);
 
   // 编辑频道
   function handleEditChannels() {

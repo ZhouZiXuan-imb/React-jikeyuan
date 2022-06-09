@@ -1,0 +1,17 @@
+.search-result {
+  .adm-nav-bar {
+    width: 100%;
+    z-index: 99;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    .adm-nav-bar-title {
+      font-size: 16px;
+    }
+  }
+
+  .search-result-list {
+    padding-top: 45px;
+  }
+}

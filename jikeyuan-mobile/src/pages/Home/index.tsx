@@ -3,17 +3,16 @@ import "./index.scss";
 import { Tabs } from "antd-mobile";
 
 import { SearchOutline, UnorderedListOutline } from "antd-mobile-icons";
-import {
-  changeActiveKey,
-  fetchArticles,
-  fetchChannels,
-} from "../../store/home.slice";
-import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { changeActiveKey } from "@/store/home.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/store";
 import ArticleListComp from "../../components/ArticleListComp";
 import ChannelsPopupComp from "@/components/ChannelsPopupComp";
+import { fetchArticles, fetchChannels } from "@/store/asyncThunk/home.thunk";
+import { useNavigate } from "react-router";
 
 function Home() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // 从store中获取数据
   // 获取频道列表
@@ -74,7 +73,7 @@ function Home() {
         </Tabs>
         {/*搜索按钮和更多按钮*/}
         <div className="bar-btn">
-          <i className={"icon"}>
+          <i className={"icon"} onClick={() => navigate("/search")}>
             <SearchOutline />
           </i>
           <i className={"icon"} onClick={handleShowChannelsList}>

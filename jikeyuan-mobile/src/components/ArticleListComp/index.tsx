@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Image, InfiniteScroll, List } from "antd-mobile";
-import { Article } from "../../types/data";
+import { Article } from "@/types/data";
 import "./index.scss";
 import LoadingComp from "../LoadingComp/index.";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/zh-cn";
 import { useNavigate } from "react-router";
+import { SearchResult } from "@/types/search";
 
 type PropsType = {
-  columnData: Article[];
+  columnData: Article[] | SearchResult[];
   articlesLoadMore: Function;
 };
 

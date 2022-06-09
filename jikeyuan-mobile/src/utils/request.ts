@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { Toast } from "antd-mobile";
-import { removeToken } from "@/utils/token";
+import { getToken, removeToken, setToken } from "@/utils/token";
 
 let baseURL = "http://geek.itheima.net/v1_0";
 
@@ -27,7 +27,7 @@ const onRejected = (response: AxiosResponse) => {
 // 带token的请求拦截器
 instanceWidthToken.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const token: string = localStorage.getItem("jky-mobile-token") || "";
+    const token: string = getToken().token;
     if (token) {
       config.headers!.Authorization = `Bearer ${token}`;
     }
@@ -42,17 +42,53 @@ instanceWidthToken.interceptors.response.use(
   onResponseFulfilled,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // 401 未授权
-      // 1. 跳转到登录页
-      Toast.show({
-        icon: "error",
-        content: "用户未授权",
-        position: "center",
-      });
+      let { refresh_token } = getToken();
+      // 如果授权过期，使用refresh_token重新获取token
+      if (refresh_token) {
+        console.log(refresh_token);
+        // 发起请求
+        axios
+          .create({
+            baseURL,
+            headers: {
+              Authorization: `Bearer ${refresh_token}`,
+            },
+          })
+          .put("/authorizations")
+          .then((response) => {
+            setToken({
+              token: response.data.data.token,
+              refresh_token: getToken().refresh_token,
+            });
+          })
+          .catch(() => {
+            // 如果没有refresh_token就跳转到登录页
+            // 401 未授权
+            // 1. 跳转到登录页
+            Toast.show({
+              icon: "error",
+              content: "用户未授权",
+              position: "center",
+            });
 
-      removeToken();
+            removeToken();
 
-      window.location.href = `${window.location.origin}/login`;
+            window.location.href = `${window.location.origin}/login`;
+          });
+      } else {
+        // 如果没有refresh_token就跳转到登录页
+        // 401 未授权
+        // 1. 跳转到登录页
+        Toast.show({
+          icon: "error",
+          content: "用户未授权",
+          position: "center",
+        });
+
+        removeToken();
+
+        window.location.href = `${window.location.origin}/login`;
+      }
     }
     return Promise.reject(error);
   }
@@ -69,11 +105,12 @@ instanceWidthOutToken.interceptors.response.use(
 );
 
 // 把方法名称保存在数组中
-const methods: Array<"get" | "post" | "put" | "delete"> = [
+const methods: Array<"get" | "post" | "put" | "delete" | "patch"> = [
   "get",
   "post",
   "put",
   "delete",
+  "patch",
 ];
 type Methods = typeof methods[number];
 
@@ -96,6 +133,8 @@ const requestWidthToken = methods.reduce((requestMethods, method) => {
         return instanceWidthToken[method](url, data);
       case "delete":
         return instanceWidthToken[method](url, { params: data });
+      case "patch":
+        return instanceWidthToken[method](url, data);
     }
   };
   return requestMethods;
@@ -115,6 +154,8 @@ const requestWidthOutToken = methods.reduce((requestMethods, method) => {
         return instanceWidthOutToken[method](url, data);
       case "delete":
         return instanceWidthOutToken[method](url, { params: data });
+      case "patch":
+        return instanceWidthOutToken[method](url, data);
     }
   };
   return requestMethods;

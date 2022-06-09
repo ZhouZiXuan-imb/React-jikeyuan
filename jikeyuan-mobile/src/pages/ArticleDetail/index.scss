@@ -9,6 +9,13 @@
     border-bottom: 1px solid #f9f9f9;
     background-color: #fff;
     width: 100%;
+
+    .adm-nav-bar {
+      .adm-nav-bar-title {
+        display: flex;
+        justify-content: left;
+      }
+    }
   }
 
   .article-title-and-content {

@@ -1,13 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Badge,
-  Button,
-  Image,
-  NavBar,
-  Popup,
-  TextArea,
-  Toast,
-} from "antd-mobile";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Badge, Button, Image, NavBar, Toast } from "antd-mobile";
 import "./index.scss";
 import { useNavigate, useParams } from "react-router";
 import DOMPurify from "dompurify";
@@ -15,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks/store";
 import {
   ArticleCommentsRequestParams,
   ArticleDetailRequestParams,
-  PublishCommentToArticleResponse,
 } from "@/types/article";
 import CommentListComp from "@/components/CommentListComp";
 import {
@@ -25,7 +16,6 @@ import {
   HeartOutline,
   UploadOutline,
 } from "antd-mobile-icons";
-import { isAuth } from "@/utils/token";
 import {
   fetchArticleDetail,
   fetchArticleDetailComments,
@@ -38,6 +28,12 @@ import {
   fetchPublishCommentToArticle,
 } from "@/store/asyncThunk/article.thunk";
 import PublishCommentComp from "@/components/PublishCommentPopupComp";
+
+// 导入 lodash 的节流函数
+import throttle from "lodash/throttle";
+
+// 导航栏的高度
+const NAV_BAR_HEIGTH = 45;
 
 function ArticleDetail() {
   const navigate = useNavigate();
@@ -73,7 +69,7 @@ function ArticleDetail() {
 
   useEffect(() => {
     dispatch(fetchArticleDetail(articleDetailRequestParams));
-  }, [dispatch]);
+  }, [dispatch, articleDetailRequestParams]);
 
   // 获取文章详情评论列表
   const {
@@ -201,11 +197,51 @@ function ArticleDetail() {
     dispatch(fetchCancelFollowingsAuth({ target: aut_id }));
   }
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const authorRef = useRef<HTMLDivElement>(null);
+
+  const [isShowNavAuthor, setIsShowNavAuthor] = useState(false);
+
+  useEffect(() => {
+    let wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    let author = authorRef.current;
+    if (!author) return;
+
+    const onScroll = throttle(() => {
+      console.log(111);
+      // height 表示：自己的高度
+      // top 表示：距离页面顶部的距离
+      const { height, top } = author!.getBoundingClientRect();
+      if (top <= NAV_BAR_HEIGTH - height) {
+        console.log("展示在标题栏中");
+        setIsShowNavAuthor(true);
+      } else {
+        console.log("从标题栏中隐藏");
+        setIsShowNavAuthor(false);
+      }
+    }, 100);
+
+    wrapper.addEventListener("scroll", onScroll);
+
+    return () => {
+      wrapper!.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
     <>
       <div className="article-detail">
         <div className="article-top">
-          <NavBar onBack={back}></NavBar>
+          <NavBar onBack={back}>
+            {isShowNavAuthor ? (
+              <div>
+                <Image src={aut_photo} width={24} height={24} fit={"cover"} />
+                {aut_name}
+              </div>
+            ) : null}
+          </NavBar>
         </div>
 
         <div className="article-title-and-content">
@@ -219,7 +255,7 @@ function ArticleDetail() {
                 <span className={"article-comment"}>{total_count}评论</span>
               </p>
 
-              <div className={"article-author"}>
+              <div className={"article-author"} ref={authorRef}>
                 <Image fit="cover" src={aut_photo} alt="" />
                 <p className={"article-author-name"}>{aut_name}</p>
                 {is_followed ? (

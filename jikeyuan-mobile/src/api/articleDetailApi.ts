@@ -6,7 +6,7 @@ import {
   LikeCommentRequestParams,
   PublishCommentToArticleRequestParams,
 } from "@/types/article";
-import { requestWidthOutToken, requestWidthToken } from "@/utils/request";
+import { requestWidthToken } from "@/utils/request";
 import { AxiosPromise } from "axios";
 
 export function getArticleCommentsList<T>({
@@ -15,7 +15,7 @@ export function getArticleCommentsList<T>({
   offset,
   limit,
 }: ArticleCommentsRequestParams): AxiosPromise<T> {
-  return requestWidthOutToken.get("/comments", {
+  return requestWidthToken.get("/comments", {
     type,
     source,
     offset,

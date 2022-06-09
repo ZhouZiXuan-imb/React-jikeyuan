@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useAppDispatch } from "@/hooks/store";
 import { fetchIsLikeComment } from "@/store/asyncThunk/article.thunk";
-import { updateCommentIsLikingAndLikeCount } from "@/store/article.slice";
 // dayjs插件需要继承relativeTime才可以使用to方法
 dayjs.extend(relativeTime);
 dayjs.locale("zh-cn");
@@ -23,8 +22,8 @@ function CommentListComp(props: propsType) {
   function handleLikeComment(com_id: string, is_liking: boolean) {
     // 发起请求
     dispatch(fetchIsLikeComment({ target: com_id, is_liking }));
-    updateCommentIsLikingAndLikeCount({ target: com_id, is_liking });
   }
+
   return (
     <>
       <div className="comments-list-container">
